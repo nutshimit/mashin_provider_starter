@@ -41,3 +41,15 @@ jobs:
             target/release/*.dll
             target/release/*.dylib
             target/release/*.so
+
+      - name: Release Plugin
+        uses: softprops/action-gh-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          draft: true
+          files: |
+            target/release/*.dll
+            target/release/*.dylib
+            target/release/*.so

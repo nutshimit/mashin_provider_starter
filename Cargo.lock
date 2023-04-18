@@ -238,9 +238,9 @@ dependencies = [
 
 [[package]]
 name = "mashin_macro"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6a469170e4827481794d861fb1c9332ebf8f3102fc401b00c16bb8be5b06b87f"
+checksum = "8afc16c50af608be64413424333960a1c18e0b81ca827f996424715accdf4248"
 dependencies = [
  "Inflector",
  "darling",
@@ -262,9 +262,9 @@ dependencies = [
 
 [[package]]
 name = "mashin_sdk"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d3d7397b62b6796bbe11beda86ff4935837ef5f4b1bd069ac367fa7473ed77c5"
+checksum = "11677bfdcd25ad3ceb6aa84fa0e82cbde8d1f239070367f33db3a3568239de31"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -380,9 +380,9 @@ checksum = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1"
 
 [[package]]
 name = "rustix"
-version = "0.37.11"
+version = "0.37.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "85597d61f83914ddeba6a47b3b8ffe7365107221c2e557ed94426489fefb5f77"
+checksum = "722529a737f5a942fdbac3a46cee213053196737c5eaa3386d52e85b786f2659"
 dependencies = [
  "bitflags",
  "errno",

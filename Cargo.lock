@@ -239,6 +239,8 @@ dependencies = [
 [[package]]
 name = "mashin_macro"
 version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6a469170e4827481794d861fb1c9332ebf8f3102fc401b00c16bb8be5b06b87f"
 dependencies = [
  "Inflector",
  "darling",
@@ -261,6 +263,8 @@ dependencies = [
 [[package]]
 name = "mashin_sdk"
 version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d3d7397b62b6796bbe11beda86ff4935837ef5f4b1bd069ac367fa7473ed77c5"
 dependencies = [
  "anyhow",
  "async-trait",

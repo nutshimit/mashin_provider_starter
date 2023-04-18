@@ -5,8 +5,6 @@ on:
     tags:
       # Catches v1.2.3 and v1.2.3-rc1
       - v[0-9]+.[0-9]+.[0-9]+*
-    branches:
-      - lemarier-gh-actions
 
 jobs:
   build:
@@ -27,13 +25,13 @@ jobs:
           toolchain: stable
           override: true
 
-      - name: build library
+      - name: Build library
         uses: actions-rs/cargo@v1
         with:
           command: build
           args: --release
 
-      - name: Upload Artifacts
+      - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: build
@@ -42,7 +40,7 @@ jobs:
             target/release/*.dylib
             target/release/*.so
 
-      - name: Release Plugin
+      - name: Draft release
         uses: softprops/action-gh-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

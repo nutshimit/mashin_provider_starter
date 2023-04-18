@@ -6,7 +6,7 @@ on:
       # Catches v1.2.3 and v1.2.3-rc1
       - v[0-9]+.[0-9]+.[0-9]+*
     branches:
-      - dev
+      - lemarier-gh-actions
 
 jobs:
   build:

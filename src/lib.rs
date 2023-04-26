@@ -1,73 +1,67 @@
-#[mashin_sdk::provider(github_url = "https://github.com/nutshimit/mashin_provider_starter")]
-mod my_provider {
-	use mashin_sdk::{
-		ProviderBuilder, ProviderDefault, ProviderState, ResourceDefault, ResourceDiff, Result,
-	};
+#[derive(Debug)]
+struct Test {
+    #[allow(dead_code)]
+    my_state: Option<[u8; 4]>,
+}
 
-	#[mashin::provider]
-	pub struct Provider;
+mashin_sdk::construct_provider!(
+    mashin_provider_starter,
+    config = {
+        /// This is my provider config
+        version: u64,
+    },
+    resources = [my_resource],
+    state = |state, _config| {
+        let mut state = state.lock();
+        let new_state = Test { my_state: Some(*b"test")  };
+        state.put(new_state);
+    },
+    on_drop = |_provider| {
+        log!(trace, "my provider dropped");
+    }
+);
 
-	#[mashin::config]
-	/// This is my provider config
-	pub struct Config {
-		/// This is my key
-		my_key: Option<String>,
-	}
+#[mashin_sdk::resource]
+pub mod my_resource {
+    use mashin_sdk::{
+        ext::parking_lot::Mutex, ProviderState, ResourceDefault, ResourceDiff, Result,
+    };
+    use std::sync::Arc;
 
-	#[mashin::state]
-	pub struct State {
-		my_state: Option<[u8; 4]>,
-	}
+    #[mashin::config]
+    pub struct Config {
+        my_key: Option<String>,
+    }
 
-	#[mashin::builder]
-	impl ProviderBuilder for Provider {
-		async fn build(&mut self) -> mashin_sdk::Result<()> {
-			log!(trace, "New provider {:?}", self.config());
+    #[mashin::resource]
+    pub struct Resource {
+        my_key: Option<String>,
+        #[sensitive]
+        my_sensitive_key: Option<String>,
+    }
 
-			let default_state = State { my_state: Some(*b"test") };
-			self.state().put(default_state);
+    #[mashin::calls]
+    impl mashin_sdk::Resource for Resource {
+        async fn get(&mut self, _provider_state: Arc<Mutex<ProviderState>>) -> Result<()> {
+            self.set_my_sensitive_key(Some("my-password-not-exported-to-ts".to_string()));
+            self.set_my_key(Some("my-value".to_string()));
+            Ok(())
+        }
 
-			Ok(())
-		}
-	}
+        async fn create(&mut self, provider_state: Arc<Mutex<ProviderState>>) -> Result<()> {
+            self.get(provider_state).await
+        }
 
-	impl Drop for Provider {
-		fn drop(&mut self) {
-			log!(trace, "Provider dropped")
-		}
-	}
+        async fn delete(&mut self, provider_state: Arc<Mutex<ProviderState>>) -> Result<()> {
+            self.get(provider_state).await
+        }
 
-	#[mashin::resource_config]
-	pub struct MyResourceConfig {
-		my_key: Option<String>,
-	}
-
-	#[mashin::resource(name = "my_module:my_resource", config = MyResourceConfig)]
-	pub struct MyResource {
-		my_key: Option<String>,
-		#[sensitive]
-		my_sensitive_key: Option<String>,
-	}
-
-	#[mashin::calls]
-	impl mashin_sdk::Resource for MyResource {
-		async fn get(&mut self, _provider_state: &ProviderState) -> Result<()> {
-			self.my_key = Some("woot".to_string());
-			self.my_sensitive_key = Some("my_password!!!!&#*^#*&".to_string());
-			Ok(())
-		}
-		async fn create(&mut self, _provider_state: &ProviderState) -> Result<()> {
-			self.get(_provider_state).await
-		}
-		async fn delete(&mut self, _provider_state: &ProviderState) -> Result<()> {
-			todo!()
-		}
-		async fn update(
-			&mut self,
-			_provider_state: &ProviderState,
-			_diff: &ResourceDiff,
-		) -> Result<()> {
-			todo!()
-		}
-	}
+        async fn update(
+            &mut self,
+            provider_state: Arc<Mutex<ProviderState>>,
+            _diff: &ResourceDiff,
+        ) -> Result<()> {
+            self.get(provider_state).await
+        }
+    }
 }

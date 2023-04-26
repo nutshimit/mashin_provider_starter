@@ -1,7 +1,8 @@
 [package]
 name = "mashin_provider_starter"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
+repository = "https://github.com/nutshimit/mashin_provider_starter"
 
 [lib]
 crate-type = ["cdylib"]

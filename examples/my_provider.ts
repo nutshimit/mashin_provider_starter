@@ -3,10 +3,10 @@ import * as myProvider from "../mod.ts";
 
 // configure aws provider
 const provider = new myProvider.Provider("sample_provider_name", {
-  myKey: "hi",
+  version: 2,
 });
 
-const my_resouce = new myProvider.MyResource(
+new myProvider.MyResource(
   "myresource",
   {
     myKey: "hello!",
@@ -15,5 +15,3 @@ const my_resouce = new myProvider.MyResource(
     provider: provider,
   }
 );
-
-console.log(my_resouce);

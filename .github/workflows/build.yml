@@ -47,6 +47,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           curl -fsSL https://get.mashin.land | sh
+          export PATH="/home/runner/.mashin/bin:$PATH"
           mashin bindgen ./bindings.json
           mashin doc ./mod.ts
 

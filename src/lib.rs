@@ -5,9 +5,10 @@ struct Test {
 }
 
 mashin_sdk::construct_provider!(
+    /// This is my provider documentation
+    /// Which support multiline
     mashin_provider_starter,
     config = {
-        /// This is my provider config
         version: u64,
     },
     resources = [my_resource],
@@ -28,13 +29,17 @@ pub mod my_resource {
     };
     use std::sync::Arc;
 
+    /// This is my resource config
     #[mashin::config]
     pub struct Config {
+        /// My config key
         my_key: Option<String>,
     }
 
+    /// This is my resource documentation
     #[mashin::resource]
     pub struct Resource {
+        /// My resource key
         my_key: Option<String>,
         #[sensitive]
         my_sensitive_key: Option<String>,

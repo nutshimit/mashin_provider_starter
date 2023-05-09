@@ -19,7 +19,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v3
 
-      - name: install rust
+      - name: Install rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -31,14 +31,15 @@ jobs:
           command: build
           args: --release
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: build
-          path: |
-            target/release/*.dll
-            target/release/*.dylib
-            target/release/*.so
+      # generate `mod.ts` from `bindings.json`
+      # the `bindings.json` is generated from the `cargo build`
+      - name: Generate bindgen and documentation
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          curl -fsSL https://get.mashin.land | sh
+          export PATH="/home/runner/.mashin/bin:$PATH"
+          mashin bindgen ./bindings.json
+          mashin doc ./mod.ts
 
       - name: Draft release
         uses: softprops/action-gh-release@master
@@ -48,6 +49,8 @@ jobs:
           tag_name: ${{ github.ref }}
           draft: true
           files: |
+            mod.ts
+            mod.json
             target/release/*.dll
             target/release/*.dylib
             target/release/*.so
